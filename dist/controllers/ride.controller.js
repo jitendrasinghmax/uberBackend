@@ -23,7 +23,7 @@ const createRide = (req, resp, next) => __awaiter(void 0, void 0, void 0, functi
         const ride = yield ride_service_1.default.createRide(_id, destination, pickup, vehicleType, fare);
         const pickupCoordinate = yield services_1.default.getCoordinatesFromAddress(pickup);
         console.log(pickupCoordinate);
-        const captainInRadius = yield services_1.default.findNearestCaptain(pickupCoordinate.lat, pickupCoordinate.lng, 10);
+        const captainInRadius = yield services_1.default.findNearestCaptain(pickupCoordinate.lat, pickupCoordinate.lng, 1000);
         const rideWithUser = yield ride_model_1.RideModel.findOne({ _id: ride._id }).populate({ path: "user", strictPopulate: false });
         console.log(rideWithUser);
         captainInRadius.map((captain) => {

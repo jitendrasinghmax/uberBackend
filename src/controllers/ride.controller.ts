@@ -11,7 +11,7 @@ const createRide = async (req: Request, resp: Response, next: NextFunction) => {
         const ride = await rideService.createRide(_id, destination, pickup, vehicleType, fare);
         const pickupCoordinate = await services.getCoordinatesFromAddress(pickup);
         console.log(pickupCoordinate);
-        const captainInRadius = await services.findNearestCaptain(pickupCoordinate.lat, pickupCoordinate.lng, 10);
+        const captainInRadius = await services.findNearestCaptain(pickupCoordinate.lat, pickupCoordinate.lng, 1000);
         const rideWithUser = await RideModel.findOne({ _id: ride._id }).populate({ path: "user", strictPopulate: false });
         console.log(rideWithUser);
 
