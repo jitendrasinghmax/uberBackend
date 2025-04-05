@@ -15,7 +15,14 @@ export const app=express();
 connectDb()
 
 app.use(cors({
-    origin: ["http://localhost:5173", "https://uber-frontend-five.vercel.app/"], // Allow requests from these origins
+    origin: (origin, callback) => {
+        const allowedOrigins = ["http://localhost:5173", "https://uber-frontend-five.vercel.app/"];
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these HTTP methods
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"], // Allow these headers
     credentials: true // Allow cookies to be sent
