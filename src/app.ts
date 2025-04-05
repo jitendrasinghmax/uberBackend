@@ -27,6 +27,8 @@ app.use(express.json());
 
 app.use(cookieParser());
 
+// Example of setting a cookie with the correct attributes
+
 app.use('/user',userRoute);
 app.use('/captain',captainRoute);
 app.use('/map',mapRouter)

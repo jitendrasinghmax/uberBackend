@@ -46,7 +46,11 @@ function registerCaptain(req, res) {
         const hashedPassword = yield bcrypt_1.default.hashPassword(req.body.password);
         const captain = yield captain_service_1.default.createCaptain(Object.assign(Object.assign({}, req.body.captain), { password: hashedPassword }));
         const token = jwt_1.default.getToken(captain._id.toString());
-        res.cookie('token', token);
+        res.cookie('token', token, {
+            httpOnly: true, // Prevent access via JavaScript
+            secure: true, // Ensure the cookie is sent over HTTPS
+            sameSite: 'none', // Explicitly cast 'None' to avoid TypeScript error
+        });
         res.status(200).json({ token, message: "registered sucessfully" });
     });
 }
@@ -63,7 +67,11 @@ function loginCaptain(req, res) {
             }
             else {
                 const token = jwt_1.default.getToken(captain._id.toString());
-                res.cookie("token", token);
+                res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                });
                 res.status(200).json({ message: "logged in sucessfully" });
             }
         }
@@ -76,7 +84,11 @@ function captainProfile(req, res) {
 }
 function logoutCaptain(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+        });
         yield user_services_1.default.createBlackListToken(req.cookies.token);
         res.status(200).json({ message: "Logout successful" });
     });

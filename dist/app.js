@@ -17,11 +17,15 @@ dotenv_1.default.config();
 exports.app = (0, express_1.default)();
 (0, db_1.connectDb)();
 exports.app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173"], // Allow requests from these origins
+    origin: ["http://localhost:5173", "https://uber-frontend-1gxmzfxbm-jitendrasinghmaxs-projects.vercel.app"], // Allow requests from these origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"], // Allow these headers
     credentials: true // Allow cookies to be sent
 }));
+exports.app.options('*', (0, cors_1.default)()); // Handle preflight requests
 exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
+// Example of setting a cookie with the correct attributes
 exports.app.use('/user', user_route_1.userRoute);
 exports.app.use('/captain', captain_route_1.captainRoute);
 exports.app.use('/map', map_routes_1.mapRouter);

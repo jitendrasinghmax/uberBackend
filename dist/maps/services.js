@@ -44,7 +44,7 @@ function getDistanceTime(origin, destination) {
         if (!origin || !destination) {
             throw new Error('destination and origin are required.');
         }
-        const apiKey = process.env.GOOGLE_MAP_API || "AIzaSyASx1gXbtH9770vDbSP4cIrIqAoKRnPj8U";
+        const apiKey = process.env.GOOGLE_MAP_API;
         if (!apiKey) {
             throw new Error('Google Maps API key is not set in environment variables.');
         }

@@ -30,7 +30,11 @@ const registerUser=async function(req:Request,resp:Response,next:NextFunction){
                                             password:hashedPassword
                                         });
     const token=jwt.getToken(user._id);
-    resp.cookie("token",token);
+    resp.cookie("token", token, {
+        httpOnly: true, // Prevent access via JavaScript
+        secure: true, // Ensure the cookie is sent over HTTPS
+        sameSite: 'none', // Use lowercase 'none' to match the expected type
+    });
     resp.status(200).json({
         status: "success",
         message: "User registered successfully",
@@ -56,7 +60,11 @@ const loginUser=async function(req:Request,resp:Response,next:NextFunction){
         }
         else{
             const token=jwt.getToken(user._id.toString());
-            resp.cookie("token",token);
+            resp.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
             resp.status(200).json({
                 status: "success",
                 message: "Login successful",
@@ -71,7 +79,11 @@ const userProfile=async function(req:Request,resp:Response,next:NextFunction){
 }
 
 const logoutUser=async function(req:Request,resp:Response,next:NextFunction){
-    resp.clearCookie("token");
+    resp.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+    });
     await userServices.createBlackListToken(req.cookies.token);
     resp.status(200).json({
         status: "success",

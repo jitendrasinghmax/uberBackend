@@ -32,7 +32,11 @@ async function registerCaptain(req:Request, res:Response) {
     const hashedPassword=await bcrypt.hashPassword(req.body.password);
     const captain=await captainService.createCaptain({...req.body.captain,password:hashedPassword});
     const token=jwt.getToken(captain._id.toString());
-    res.cookie('token',token);
+    res.cookie('token', token, {
+        httpOnly: true, // Prevent access via JavaScript
+        secure: true, // Ensure the cookie is sent over HTTPS
+        sameSite: 'none', // Explicitly cast 'None' to avoid TypeScript error
+    });
     res.status(200).json({token,message:"registered sucessfully"});
 }
 async function loginCaptain(req:Request, res:Response) {
@@ -47,7 +51,11 @@ async function loginCaptain(req:Request, res:Response) {
         }
         else{
             const token=jwt.getToken(captain._id.toString());
-            res.cookie("token",token);
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+            });
             res.status(200).json({message:"logged in sucessfully"});
         }
     }
@@ -56,7 +64,11 @@ async function captainProfile(req:Request, res:Response) {
     res.status(200).json({captain:req.body.captain});
 }
 async function logoutCaptain(req:Request, res:Response) {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+    });
     await userServices.createBlackListToken(req.cookies.token);
     res.status(200).json({message:"Logout successful"});
 }
